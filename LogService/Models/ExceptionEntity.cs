@@ -7,9 +7,9 @@ using System.Text;
 
 namespace LogService.Client.Models
 {
-    public class LogEntity : TableEntity
+    public class ExceptionEntity : TableEntity
     {
-        public LogEntity(HttpContext context, Exception exception, Encoding sessionEncoding = null)
+        public ExceptionEntity(HttpContext context, Exception exception, Encoding sessionEncoding = null)
         {
             PartitionKey = context.Request.Host.Host;
             RowKey = Guid.NewGuid().ToString();
