@@ -20,7 +20,8 @@ namespace LogService.Client.Models
             Query = context.Request.Query.ToDictionary(item => item.Key, item => string.Join(", ", item.Value));
             Form = context.Request.Form.ToDictionary(item => item.Key, item => string.Join(", ", item.Value));
             Cookies = context.Request.Cookies.ToDictionary(item => item.Key, item => item.Value);
-            Session = SessionToDictionary(context.Session, sessionEncoding);
+            StatusCode = context.Response.StatusCode;
+            Session = SessionToDictionary(context.Session, sessionEncoding);            
             Message = exception.Message;
             StackTrace = exception.StackTrace;
         }
@@ -53,6 +54,8 @@ namespace LogService.Client.Models
         /// Portion of URL between host and query string
         /// </summary>
         public string Path { get; set; }
+
+        public int StatusCode { get; set; }
 
         public Dictionary<string, string> Query { get; set; }
 
