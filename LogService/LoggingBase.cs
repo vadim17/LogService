@@ -11,7 +11,7 @@ namespace LogService.Client
 {
     public abstract class LoggingBase
     {
-        private readonly RequestDelegate _next;
+        private readonly RequestDelegate _next;        
 
         public LoggingBase(RequestDelegate next)
         {

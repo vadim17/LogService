@@ -9,24 +9,23 @@ using System.Threading.Tasks;
 namespace SampleApp
 {
     public class ErrorLog : LoggingBase
-    {
-        private readonly IConfiguration _config;
+    {        
+        private readonly IConfigurationSection _section;
 
         public ErrorLog(IConfiguration config, RequestDelegate next) : base(next)
         {
-            _config = config;
+            _section = config.GetSection("StorageAccount");
         }        
 
         protected override CloudStorageAccount GetStorageAccount()
-        {
-            var section = _config.GetSection("Storage");
-            return new CloudStorageAccount(new StorageCredentials(section["Name"], section["Key"]), true);
+        {            
+            return new CloudStorageAccount(new StorageCredentials(_section["Name"], _section["Key"]), true);
         }
 
         protected override async Task<CloudTable> GetTableAsync(CloudStorageAccount storageAccount)
         {
-            var client = storageAccount.CreateCloudTableClient();
-            var table = client.GetTableReference("");
+            var client = storageAccount.CreateCloudTableClient();            
+            var table = client.GetTableReference(_section["TableName"]);
             await table.CreateIfNotExistsAsync();
             return table;
         }
