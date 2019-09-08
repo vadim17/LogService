@@ -29,18 +29,19 @@ namespace LogService.Client
             }
             catch (Exception exc)
             {
-                await LogExceptionAsync(context, exc);
+                string key = await LogExceptionAsync(context, exc);
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 await context.Response.WriteAsync(new
                 {
                     context.Response.StatusCode,
-                    Message = exc.Message
+                    Message = exc.Message,
+                    ErrorKey = key
                 }.ToString());
             }
         }
 
-        private async Task LogExceptionAsync(HttpContext context, Exception exc)
+        private async Task<string> LogExceptionAsync(HttpContext context, Exception exc)
         {
             try
             {
@@ -49,6 +50,7 @@ namespace LogService.Client
                 var table = await GetTableAsync(account);
                 var operation = TableOperation.Insert(entity);
                 await table.ExecuteAsync(operation);
+                return entity.RowKey;
             }
             catch (Exception inner)
             {
