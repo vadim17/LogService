@@ -34,9 +34,9 @@ namespace LogService.Client
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 await context.Response.WriteAsync(new
                 {
-                    context.Response.StatusCode,
-                    Message = exc.Message,
-                    ErrorKey = key
+                    statusCode = context.Response.StatusCode,
+                    message = exc.Message,
+                    errorKey = key
                 }.ToString());
             }
         }
